@@ -1,0 +1,12 @@
+name = "lpm-page"
+version = "1.0.0"
+description = "LPM Admin Interface"
+authors = ["Anildo"]
+license = "MIT"
+
+[dependencies]
+lpm-test = "0.1.0"
+
+[scripts]
+start = "php -S localhost:4041"
+test = "lua tests/test_runner.lua"

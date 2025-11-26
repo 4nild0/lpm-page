@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPM Admin</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .content {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .nav-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-item:hover {
+            background: #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: left;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>LPM Admin Dashboard</h1>
+
+    <div class="grid">
+        <div class="sidebar">
+            <div class="nav-item" onclick="showView('dashboard')">Dashboard</div>
+            <div class="nav-item" onclick="showView('upload')">Upload Package</div>
+            <div class="nav-item" onclick="showView('projects')">Projects</div>
+        </div>
+
+        <div class="content">
+            <div id="dashboard" class="view">
+                <h2>Welcome to LPM Admin</h2>
+                <p>Manage your Lua packages and projects.</p>
+                <div id="stats">Loading stats...</div>
+            </div>
+
+            <div id="upload" class="view hidden">
+                <h2>Upload Package</h2>
+                <form id="uploadForm">
+                    <div class="form-group">
+                        <label>Package Name</label>
+                        <input type="text" id="pkgName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Version</label>
+                        <input type="text" id="pkgVersion" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Manifest (TOML)</label>
+                        <textarea id="pkgManifest" rows="5" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Archive (.zip)</label>
+                        <input type="file" id="pkgFile" accept=".zip" required>
+                    </div>
+                    <button type="submit">Upload</button>
+                </form>
+                <div id="uploadMsg"></div>
+            </div>
+
+            <div id="projects" class="view hidden">
+                <h2>Projects</h2>
+                <div id="projectList">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:4040';
+
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            if (id === 'projects') loadProjects();
+        }
+
+        async function loadProjects() {
+            try {
+                const res = await fetch(`${API_URL}/projects`);
+                const projects = await res.json();
+
+                let html = '<table><thead><tr><th>Name</th><th>Actions</th></tr></thead><tbody>';
+                projects.forEach(p => {
+                    html += `<tr><td>${p}</td><td><button onclick="viewProject('${p}')">View</button></td></tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('projectList').innerHTML = html;
+            } catch (err) {
+                document.getElementById('projectList').innerHTML = 'Error loading projects';
+            }
+        }
+
+        async function viewProject(name) {
+            try {
+                const res = await fetch(`${API_URL}/projects/${name}`);
+                const data = await res.json();
+                alert(JSON.stringify(data, null, 2));
+            } catch (err) {
+                alert('Error loading details');
+            }
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('pkgName').value;
+            const version = document.getElementById('pkgVersion').value;
+            const fileInput = document.getElementById('pkgFile');
+            const file = fileInput.files[0];
+
+            if (!file) return;
+
+            const msg = document.getElementById('uploadMsg');
+            msg.textContent = 'Uploading...';
+
+            try {
+                // Read file as ArrayBuffer
+                const buffer = await file.arrayBuffer();
+
+                const res = await fetch(`${API_URL}/packages?name=${name}&version=${version}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/octet-stream'
+                    },
+                    body: buffer
+                });
+
+                if (res.ok) {
+                    msg.textContent = 'Upload successful!';
+                    e.target.reset();
+                    loadProjects();
+                } else {
+                    const err = await res.json();
+                    msg.textContent = 'Upload failed: ' + (err.error || 'Unknown error');
+                }
+            } catch (err) {
+                console.error(err);
+                msg.textContent = 'Connection error: ' + err.message + '. Ensure server is running on port 4040.';
+                msg.className = 'error';
+                msg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>
