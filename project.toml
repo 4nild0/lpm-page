@@ -1,12 +1,7 @@
 name = "lpm-page"
-version = "1.0.0"
-description = "LPM Admin Interface"
-authors = ["Anildo"]
-license = "MIT"
+version = "0.1.0"
+author = "Anildo"
+description = "Web Page for Lua Project Manager"
 
 [dependencies]
-lpm-test = "0.1.0"
-
-[scripts]
-start = "php -S localhost:4041"
-test = "lua tests/test_runner.lua"
+lpm-core = "0.1.0"

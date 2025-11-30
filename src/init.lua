@@ -1,0 +1,2 @@
+local Page = {}
+return Page

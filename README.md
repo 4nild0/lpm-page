@@ -1,53 +1,95 @@
 # LPM Page
 
-Web portal for the LPM (Lua Package Manager) ecosystem - inspired by packagist.org and pub.dev.
+Portal web para o ecossistema LPM (Lua Package Manager) - inspirado no packagist.org e pub.dev.
 
-## Features
+## Funcionalidades
 
-- **📦 Package Browser**: Browse all available packages
-- **🔍 Search**: Find packages by name
-- **📊 Statistics**: View repository stats
-- **📝 Package Details**: View versions, dependencies, and install commands
-- **⚙️ Admin Panel**: Upload and manage packages
-- **🎨 Clean UI**: Simple, functional design with CSS styling
-- **🔌 Pure Lua**: Custom HTTP client, JSON parser, no external dependencies
+- **📦 Navegador de Pacotes**: Explore todos os pacotes disponíveis
+- **🔍 Busca**: Encontre pacotes por nome
+- **📊 Estatísticas**: Visualize estatísticas do repositório
+- **📝 Detalhes do Pacote**: Versões, dependências e comandos de instalação
+- **⚙️ Painel de Administração**: Faça upload e gerencie pacotes
+- **🎨 Interface Limpa**: Design simples e funcional com estilização CSS
+- **🔌 Puro Lua**: Cliente HTTP personalizado, parser JSON, sem dependências externas
 
-## Installation
+## Instalação
 
 ```bash
-# Clone the repository
+# Clone o repositório
 git clone https://github.com/4nild0/lpm-page.git
 cd lpm-page
 
-# Run tests
+# Execute os testes
 lua tests.lua
 ```
 
-## Running the Portal
+## Iniciando o Portal
 
 ```bash
-# From the parent lpm directory
+# A partir do diretório raiz do lpm
 lua start_frontend.lua
 
-# Portal will be available at http://localhost:4041
+# O portal estará disponível em http://localhost:4041
 ```
 
-**Note:** Requires [lpm-server](https://github.com/4nild0/lpm-server) running on port 4040.
+**Nota:** Requer o [lpm-server](https://github.com/4nild0/lpm-server) rodando na porta 4040.
 
-## Pages
+## Estrutura do Projeto
 
-### Home (`/`)
-- Repository statistics
-- Search bar
-- Quick links
+```
+lpm-page/
+├── src/
+│   ├── api.lua         # Cliente da API
+│   ├── app.lua         # Aplicação principal
+│   ├── router.lua      # Roteamento
+│   ├── templates/      # Templates HTML
+│   │   ├── layout.lua
+│   │   ├── home.lua
+│   │   └── package.lua
+│   └── utils.lua       # Utilitários
+├── static/             # Arquivos estáticos
+│   ├── css/
+│   └── js/
+├── tests/              # Testes
+└── main.lua            # Ponto de entrada
+```
 
-### Packages (`/packages`)
-- List of all available packages
-- Links to package details
+## Páginas
 
-### Package View (`/package/:name`)
-- Package name and versions
-- Install command with copy button
+### Página Inicial (`/`)
+- Estatísticas do repositório
+- Barra de busca
+- Links rápidos
+
+### Pacotes (`/pacotes`)
+- Lista de todos os pacotes disponíveis
+- Links para detalhes dos pacotes
+
+### Visualização do Pacote (`/pacote/:nome`)
+- Nome e versões do pacote
+- Comando de instalação com botão de copiar
+- Dependências
+- Histórico de versões
+
+## Configuração
+
+Crie um arquivo `.env` na raiz do projeto para configurar:
+
+```
+PORT=4041
+API_URL=http://localhost:4040
+TITLE=LPM - Lua Package Manager
+```
+
+## Desenvolvimento
+
+1. Faça um fork do repositório
+2. Crie uma branch para sua feature
+3. Envie um pull request
+
+## Licença
+
+MIT
 - Version history
 
 ### Admin (`/admin`)
