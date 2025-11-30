@@ -1,23 +1,18 @@
 # LPM Page
 
-Interface web para o LPM (Lua Package Manager), permitindo visualizar e gerenciar pacotes Lua através de uma interface amigável.
+Interface web estática para o LPM (Lua Package Manager), fornecendo uma interface visual para visualizar e gerenciar pacotes Lua.
+
+## Descrição
+
+O `lpm-page` é um servidor HTTP simples que serve uma interface web estática para interagir com o LPM Server. Ele fornece uma interface amigável para navegar pacotes, visualizar detalhes e fazer upload de novos pacotes.
 
 ## Funcionalidades
 
-- **Navegação**: Explore pacotes disponíveis no repositório
-- **Visualização de Detalhes**: Veja informações detalhadas sobre cada pacote
-- **Interface Responsiva**: Acessível em diferentes dispositivos
-- **Integração com LPM Server**: Conecta-se ao servidor LPM para gerenciar pacotes
-
-## Estrutura do Projeto
-
-```
-lpm-page/
-├── src/
-│   └── init.lua       # Ponto de entrada da aplicação
-├── static/            # Arquivos estáticos (HTML, CSS, JS)
-└── tests/             # Testes (se aplicável)
-```
+- **Interface Web**: Interface HTML/CSS/JavaScript para gerenciamento de pacotes
+- **Dashboard**: Visão geral dos pacotes e estatísticas
+- **Listagem de Pacotes**: Visualização de todos os pacotes disponíveis
+- **Upload de Pacotes**: Interface para fazer upload de novos pacotes
+- **Servidor Estático**: Servidor HTTP simples para servir arquivos estáticos
 
 ## Instalação
 
@@ -25,39 +20,65 @@ lpm-page/
 # Clone o repositório
 git clone https://github.com/4nild0/lpm-page.git
 cd lpm-page
+```
 
-# Inicie o servidor web
-lua start_frontend.lua
+## Uso
+
+```bash
+# Inicie o servidor
+lua main.lua
+
+# O servidor estará disponível em http://localhost:3000
 ```
 
 ## Configuração
 
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+O servidor usa a porta 3000 por padrão. Para alterar, edite a variável `PORT` no arquivo `main.lua`.
+
+## Estrutura do Projeto
 
 ```
-PORT=4041                   # Porta do servidor web
-API_URL=http://localhost:4040  # URL do servidor LPM
-TITLE=LPM - Lua Package Manager
+lpm-page/
+├── src/
+│   └── init.lua       # Módulo principal (atualmente vazio)
+├── deps/              # Dependências (lpm-core)
+├── index.html         # Página principal HTML
+├── style.css          # Estilos CSS
+├── app.js             # JavaScript da aplicação
+├── main.lua           # Servidor HTTP estático
+└── project.toml       # Manifesto do projeto
 ```
 
-## Como Usar
+## Funcionalidades da Interface
 
-1. Certifique-se de que o servidor LPM está rodando
-2. Inicie o servidor web com `lua start_frontend.lua`
-3. Acesse `http://localhost:4041` no seu navegador
-
-## Páginas
-
-### Página Inicial
+### Dashboard
 - Visão geral dos pacotes disponíveis
 - Estatísticas do repositório
-- Barra de busca
+- Navegação rápida
 
-### Detalhes do Pacote
-- Informações detalhadas
-- Versões disponíveis
-- Dependências
-- Comandos de instalação
+### Listagem de Pacotes
+- Visualização de todos os pacotes disponíveis
+- Informações sobre cada pacote
+
+### Upload de Pacotes
+- Interface para fazer upload de novos pacotes
+- Formulário com nome e versão do pacote
+
+## Integração com LPM Server
+
+A interface web se comunica com o `lpm-server` através de requisições HTTP. Certifique-se de que o servidor LPM está rodando e configurado corretamente.
+
+Por padrão, a interface espera que o servidor esteja em `http://localhost:8080`. Para alterar, edite o arquivo `app.js`.
+
+## Dependências
+
+- **lpm-core**: Biblioteca central do LPM (instalada automaticamente)
+
+## Requisitos
+
+- Lua 5.1 ou superior
+- LPM Server em execução
+- Navegador web moderno
 
 ## Desenvolvimento
 
@@ -69,87 +90,6 @@ Para contribuir com o desenvolvimento:
 4. Faça push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um Pull Request
 
-## Requisitos
-
-- Servidor LPM em execução
-- Navegador web moderno
-
 ## Licença
 
 MIT License
-- Version history
-
-### Admin (`/admin`)
-- Upload new packages
-- Package management interface
-
-### Search (`/search?q=query`)
-- Filter packages by name
-- Results with links to package pages
-
-## Project Structure
-
-```
-lpm-page/
-├── src/
-│   ├── http_client.lua    # HTTP client for server communication
-│   ├── json.lua           # JSON parser
-│   ├── home.lua           # Home page view
-│   ├── package_list.lua   # Package listing
-│   ├── package_view.lua   # Package details
-│   ├── admin.lua          # Admin interface
-│   ├── search.lua         # Search functionality
-│   └── publisher.lua      # Package publishing logic
-├── tests/
-│   └── test_*.lua         # Comprehensive test suite
-├── style.css              # Styling
-├── index.html             # Static entry point
-└── project.toml           # Project manifest
-```
-
-## Architecture
-
-The portal communicates with `lpm-server` via a custom HTTP client:
-
-```
-┌─────────────┐         ┌─────────────┐
-│  lpm-page   │ ◄─────► │ lpm-server  │
-│  (port      │  HTTP   │  (port      │
-│   4041)     │         │   4040)     │
-└─────────────┘         └─────────────┘
-```
-
-## Testing
-
-Uses the [lpm-test](https://github.com/4nild0/lpm-test) framework with mocked HTTP requests.
-
-```bash
-lua tests.lua
-```
-
-All 12 tests cover:
-- HTTP client functionality
-- JSON parsing
-- View rendering
-- Search logic
-- Publisher operations
-
-## Development
-
-The portal is built following strict coding standards:
-- **TDD**: All features test-driven
-- **SOLID Principles**: Clean, modular code
-- **No Comments**: Self-documenting code
-- **Pure Lua**: No external libraries
-
-## API Integration
-
-Consumes the following lpm-server endpoints:
-- `GET /projects` - List packages
-- `GET /projects/:name` - Package details
-- `GET /stats` - Statistics
-- `POST /packages` - Upload package
-
-## License
-
-MIT
