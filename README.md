@@ -1,16 +1,23 @@
 # LPM Page
 
-Portal web para o ecossistema LPM (Lua Package Manager) - inspirado no packagist.org e pub.dev.
+Interface web para o LPM (Lua Package Manager), permitindo visualizar e gerenciar pacotes Lua através de uma interface amigável.
 
 ## Funcionalidades
 
-- **📦 Navegador de Pacotes**: Explore todos os pacotes disponíveis
-- **🔍 Busca**: Encontre pacotes por nome
-- **📊 Estatísticas**: Visualize estatísticas do repositório
-- **📝 Detalhes do Pacote**: Versões, dependências e comandos de instalação
-- **⚙️ Painel de Administração**: Faça upload e gerencie pacotes
-- **🎨 Interface Limpa**: Design simples e funcional com estilização CSS
-- **🔌 Puro Lua**: Cliente HTTP personalizado, parser JSON, sem dependências externas
+- **Navegação**: Explore pacotes disponíveis no repositório
+- **Visualização de Detalhes**: Veja informações detalhadas sobre cada pacote
+- **Interface Responsiva**: Acessível em diferentes dispositivos
+- **Integração com LPM Server**: Conecta-se ao servidor LPM para gerenciar pacotes
+
+## Estrutura do Projeto
+
+```
+lpm-page/
+├── src/
+│   └── init.lua       # Ponto de entrada da aplicação
+├── static/            # Arquivos estáticos (HTML, CSS, JS)
+└── tests/             # Testes (se aplicável)
+```
 
 ## Instalação
 
@@ -19,77 +26,57 @@ Portal web para o ecossistema LPM (Lua Package Manager) - inspirado no packagist
 git clone https://github.com/4nild0/lpm-page.git
 cd lpm-page
 
-# Execute os testes
-lua tests.lua
-```
-
-## Iniciando o Portal
-
-```bash
-# A partir do diretório raiz do lpm
+# Inicie o servidor web
 lua start_frontend.lua
-
-# O portal estará disponível em http://localhost:4041
 ```
-
-**Nota:** Requer o [lpm-server](https://github.com/4nild0/lpm-server) rodando na porta 4040.
-
-## Estrutura do Projeto
-
-```
-lpm-page/
-├── src/
-│   ├── api.lua         # Cliente da API
-│   ├── app.lua         # Aplicação principal
-│   ├── router.lua      # Roteamento
-│   ├── templates/      # Templates HTML
-│   │   ├── layout.lua
-│   │   ├── home.lua
-│   │   └── package.lua
-│   └── utils.lua       # Utilitários
-├── static/             # Arquivos estáticos
-│   ├── css/
-│   └── js/
-├── tests/              # Testes
-└── main.lua            # Ponto de entrada
-```
-
-## Páginas
-
-### Página Inicial (`/`)
-- Estatísticas do repositório
-- Barra de busca
-- Links rápidos
-
-### Pacotes (`/pacotes`)
-- Lista de todos os pacotes disponíveis
-- Links para detalhes dos pacotes
-
-### Visualização do Pacote (`/pacote/:nome`)
-- Nome e versões do pacote
-- Comando de instalação com botão de copiar
-- Dependências
-- Histórico de versões
 
 ## Configuração
 
-Crie um arquivo `.env` na raiz do projeto para configurar:
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
 ```
-PORT=4041
-API_URL=http://localhost:4040
+PORT=4041                   # Porta do servidor web
+API_URL=http://localhost:4040  # URL do servidor LPM
 TITLE=LPM - Lua Package Manager
 ```
 
+## Como Usar
+
+1. Certifique-se de que o servidor LPM está rodando
+2. Inicie o servidor web com `lua start_frontend.lua`
+3. Acesse `http://localhost:4041` no seu navegador
+
+## Páginas
+
+### Página Inicial
+- Visão geral dos pacotes disponíveis
+- Estatísticas do repositório
+- Barra de busca
+
+### Detalhes do Pacote
+- Informações detalhadas
+- Versões disponíveis
+- Dependências
+- Comandos de instalação
+
 ## Desenvolvimento
 
+Para contribuir com o desenvolvimento:
+
 1. Faça um fork do repositório
-2. Crie uma branch para sua feature
-3. Envie um pull request
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
+3. Faça commit das suas alterações (`git commit -am 'Adiciona nova funcionalidade'`)
+4. Faça push para a branch (`git push origin feature/nova-funcionalidade`)
+5. Abra um Pull Request
+
+## Requisitos
+
+- Servidor LPM em execução
+- Navegador web moderno
 
 ## Licença
 
-MIT
+MIT License
 - Version history
 
 ### Admin (`/admin`)
