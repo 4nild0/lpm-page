@@ -5,3 +5,5 @@ description = "Web Page for Lua Project Manager"
 
 [dependencies]
 lpm-core = "0.1.0"
+
+[test-dependencies]
